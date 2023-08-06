@@ -8,7 +8,7 @@ class FavoriteMealsNotifier extends StateNotifier<List<Meal>> {
 //hence you need to create a new one
 //state property is local is availabe thanks to state notifer
 // hence it hold data i.e list of meals in this case
-  void toggleMealFavoriteStatus(Meal meal) {
+  bool toggleMealFavoriteStatus(Meal meal) {
     final mealIsFavorite = state.contains(meal);
     if (mealIsFavorite) {
       //this checks is the list is favorite or not
@@ -16,8 +16,10 @@ class FavoriteMealsNotifier extends StateNotifier<List<Meal>> {
       //keep meal is it's id is not equal to the meal
       //in the super list
       state = state.where((m) => m.id != meal.id).toList();
+      return false;
     } else {
       state = [...state, meal];
+      return true;
     }
   }
 }
