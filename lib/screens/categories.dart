@@ -57,36 +57,36 @@ class _CategoriesScreenState extends State<CategoriesScreen>
   @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(
-      animation: _animationController,
-      //It is kept at child so that it is not rebuild everytime and also kept inside the animation
-      child: GridView(
-        padding: const EdgeInsets.all(24),
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          childAspectRatio: 3 / 2,
-          crossAxisSpacing: 20,
-          mainAxisSpacing: 20,
+        animation: _animationController,
+        //It is kept at child so that it is not rebuild everytime and also kept inside the animation
+        child: GridView(
+          padding: const EdgeInsets.all(24),
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            childAspectRatio: 3 / 2,
+            crossAxisSpacing: 20,
+            mainAxisSpacing: 20,
+          ),
+          children: [
+            // availableCategories.map((category) => CategoryGridItem(category: category)).toList()
+            for (final category in availableCategories)
+              CategoryGridItem(
+                category: category,
+                onSelectCategory: () {
+                  _selectCategory(context, category);
+                },
+              )
+          ],
         ),
-        children: [
-          // availableCategories.map((category) => CategoryGridItem(category: category)).toList()
-          for (final category in availableCategories)
-            CategoryGridItem(
-              category: category,
-              onSelectCategory: () {
-                _selectCategory(context, category);
-              },
-            )
-        ],
-      ),
-      builder: (context, child) => Padding(
-        padding: EdgeInsets.only(
-          //this is used to display the animation form the top
-          // initallialy the top would be at 0 since the lowerbound would be 0 and ub be 1
-          //then it would later stop at 0 and 1
-          top: 100 - _animationController.value * 100,
-        ),
-        child: child,
-      ),
-    );
+        builder: (context, child) => SlideTransition(
+              position: Tween(
+                begin: const Offset(0, 0.3),
+                end: const Offset(0, 0),
+              ).animate(
+                CurvedAnimation(
+                    parent: _animationController, curve: Curves.easeInOut),
+              ),
+              child: child,
+            ));
   }
 }
